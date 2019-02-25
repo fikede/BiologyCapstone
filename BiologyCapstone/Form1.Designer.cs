@@ -31,21 +31,25 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.LoadImage = new System.Windows.Forms.Button();
             this.ZoomSlider = new System.Windows.Forms.TrackBar();
+            this.brightnessControl = new System.Windows.Forms.TrackBar();
+            this.EditedImage = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(402, 307);
+            this.pictureBox1.Size = new System.Drawing.Size(355, 223);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // LoadImage
             // 
-            this.LoadImage.Location = new System.Drawing.Point(552, 236);
+            this.LoadImage.Location = new System.Drawing.Point(554, 304);
             this.LoadImage.Name = "LoadImage";
             this.LoadImage.Size = new System.Drawing.Size(99, 39);
             this.LoadImage.TabIndex = 1;
@@ -55,17 +59,36 @@
             // 
             // ZoomSlider
             // 
-            this.ZoomSlider.Location = new System.Drawing.Point(481, 62);
+            this.ZoomSlider.Location = new System.Drawing.Point(12, 265);
             this.ZoomSlider.Name = "ZoomSlider";
             this.ZoomSlider.Size = new System.Drawing.Size(250, 45);
             this.ZoomSlider.TabIndex = 2;
             this.ZoomSlider.Scroll += new System.EventHandler(this.ZoomSlider_Scroll);
+            // 
+            // brightnessControl
+            // 
+            this.brightnessControl.Location = new System.Drawing.Point(12, 368);
+            this.brightnessControl.Name = "brightnessControl";
+            this.brightnessControl.Size = new System.Drawing.Size(250, 45);
+            this.brightnessControl.TabIndex = 3;
+            this.brightnessControl.Scroll += new System.EventHandler(this.brightnessControl_Scroll);
+            // 
+            // EditedImage
+            // 
+            this.EditedImage.Location = new System.Drawing.Point(420, 12);
+            this.EditedImage.Name = "EditedImage";
+            this.EditedImage.Size = new System.Drawing.Size(351, 223);
+            this.EditedImage.TabIndex = 4;
+            this.EditedImage.TabStop = false;
+            this.EditedImage.Click += new System.EventHandler(this.EditedImage_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.EditedImage);
+            this.Controls.Add(this.brightnessControl);
             this.Controls.Add(this.ZoomSlider);
             this.Controls.Add(this.LoadImage);
             this.Controls.Add(this.pictureBox1);
@@ -74,6 +97,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -84,6 +109,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button LoadImage;
         private System.Windows.Forms.TrackBar ZoomSlider;
+        private System.Windows.Forms.TrackBar brightnessControl;
+        private System.Windows.Forms.PictureBox EditedImage;
     }
 }
 
