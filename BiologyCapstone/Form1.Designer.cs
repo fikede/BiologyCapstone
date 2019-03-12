@@ -33,10 +33,13 @@
             this.ZoomSlider = new System.Windows.Forms.TrackBar();
             this.brightnessControl = new System.Windows.Forms.TrackBar();
             this.EditedImage = new System.Windows.Forms.PictureBox();
+            this.minimumRadius = new System.Windows.Forms.TrackBar();
+            this.numberOfSpots = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -49,7 +52,7 @@
             // 
             // LoadImage
             // 
-            this.LoadImage.Location = new System.Drawing.Point(554, 304);
+            this.LoadImage.Location = new System.Drawing.Point(672, 265);
             this.LoadImage.Name = "LoadImage";
             this.LoadImage.Size = new System.Drawing.Size(99, 39);
             this.LoadImage.TabIndex = 1;
@@ -82,11 +85,29 @@
             this.EditedImage.TabStop = false;
             this.EditedImage.Click += new System.EventHandler(this.EditedImage_Click);
             // 
+            // minimumRadius
+            // 
+            this.minimumRadius.Location = new System.Drawing.Point(528, 314);
+            this.minimumRadius.Name = "minimumRadius";
+            this.minimumRadius.Size = new System.Drawing.Size(224, 45);
+            this.minimumRadius.TabIndex = 5;
+            this.minimumRadius.Scroll += new System.EventHandler(this.minimumRadius_Scroll);
+            // 
+            // numberOfSpots
+            // 
+            this.numberOfSpots.Location = new System.Drawing.Point(307, 313);
+            this.numberOfSpots.Name = "numberOfSpots";
+            this.numberOfSpots.Size = new System.Drawing.Size(113, 45);
+            this.numberOfSpots.TabIndex = 6;
+            this.numberOfSpots.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(815, 434);
+            this.Controls.Add(this.numberOfSpots);
+            this.Controls.Add(this.minimumRadius);
             this.Controls.Add(this.EditedImage);
             this.Controls.Add(this.brightnessControl);
             this.Controls.Add(this.ZoomSlider);
@@ -99,6 +120,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,6 +133,8 @@
         private System.Windows.Forms.TrackBar ZoomSlider;
         private System.Windows.Forms.TrackBar brightnessControl;
         private System.Windows.Forms.PictureBox EditedImage;
+        private System.Windows.Forms.TrackBar minimumRadius;
+        private System.Windows.Forms.RichTextBox numberOfSpots;
     }
 }
 
