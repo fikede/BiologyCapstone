@@ -201,14 +201,10 @@ namespace BiologyCapstone
         }
 
        
-        private void minimumRadius_Scroll(object sender, EventArgs e)
+       private void minimumRadius_Scroll(object sender, EventArgs e)
         {
-            int currentTrackBarPosition = brightnessControl.Value;
-            double scaling = Math.Sqrt(byte.MaxValue * byte.MaxValue * 3);
-            scaling = (scaling + scaling) / 100;
-            double scaledPostion = currentTrackBarPosition * scaling;
-            int number = numberOfPoints(editedImage, scaledPostion);
-        }        
+            
+        }       
 
         public int numberOfPoints(Image img, double value)
         {
@@ -253,27 +249,28 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-            int average = 0;
-            bool [,] edges = new bool[bmp.Height, bmp.Width];
+           // int average = 0;
+            bool [,] visited = new bool[bmp.Height, bmp.Width];
+            visited = nonDarkPixels;
             for (int i = 0; i < bmp.Height; i ++)
             {
                 for(int j = 0; j < bmp.Width; j ++)
                 {
-                    if(nonDarkPixels[i,j])
+                    if(visited[i, j])
                     {
                         //DFS count connected methods
-                        DepthFirstSearch(nonDarkPixels, i, j, edges);
+                        DFS(visited, i, j);
                         count ++;           // count = number of components??
                     }
                 }
             }
 
-            for (int i = 0; i < bmp.Height; i++)
+            /*for (int i = 0; i < bmp.Height; i++)
             {
                 int oldAverage = average;
                 for (int j = 0; j < bmp.Width; j++)
                 {
-                    if (edges[i, j])
+                    if (visited[i, j])
                     {
                         average = average + j;
                     }
@@ -282,34 +279,69 @@ namespace BiologyCapstone
                 {
                     average = average + i;
                 }
-            }
-            average = average / count;     //average all the x, y components
-            return average;
-
+            }*/
+            //average = average / count;     //average all the x, y components
+            return count;
         }
 
-        public bool [,] DepthFirstSearch(bool [,] array, int pixelHeight, int pixelWidth, bool[,] edges)
+        public bool [,] DepthFirstSearch(bool [,] array, int starti, int startj, bool[,] visited, int height, int width)
         {
-            for(int i = 0; i < pixelHeight; i ++)
+            for(int i = starti; i < height; i ++) // go +1 and - 1 from each pixel
             {
-                for(int j = 0; j < pixelWidth; j ++)
+                for(int j = startj; j < width; j ++)
                 {
                     if(array[i, j] == true)
                     {
                         array[i, j] = false;
-                        edges[i, j] = true;
+                        visited[i, j] = true;
+                        DepthFirstSearch(array, i, j, visited, height, width);
                     }
                 }
             }
-            return edges;
+            return visited;
         }
+
+        public void DFS(bool [,] visited, int startX, int startY)
+        {            
+            //i, j
+            if (startX > -1 && startY > -1 && startX < visited.GetLength(0) && startY < visited.GetLength(1) 
+                            && visited[startX, startY] == true)
+            {
+                visited[startX, startY] = false;
+                DFS(visited, startX, startY + 1);         // i, j + 1
+                DFS(visited, startX, startY - 1);         // i, j - 1
+                DFS(visited, startX + 1, startY);         // i + 1, j
+                DFS(visited, startX - 1, startY);         // i - 1, j
+                DFS(visited, startX - 1, startY + 1);         // i - 1, j + 1
+                DFS(visited, startX - 1, startY - 1);         // i - 1, j - 1
+                DFS(visited, startX + 1, startY + 1);         // i + 1, j + 1
+                DFS(visited, startX + 1, startY - 1);         // i + 1, j - 1
+            }
+
+        }
+
+        
         
         private void EditedImage_Click(object sender, EventArgs e)
         {
 
         }
 
+        private void numberOfSpots_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
 
+        private void Count_Click(object sender, EventArgs e)
+        {
+            int currentTrackBarPosition = brightnessControl.Value;
+            double scaling = Math.Sqrt(byte.MaxValue * byte.MaxValue * 3);
+            scaling = (scaling + scaling) / 100;
+            double scaledPostion = currentTrackBarPosition * scaling;
+            int number = numberOfPoints(editedImage, scaledPostion);
+            numberOfSpots.Text = number.ToString();
+        }
     }
 }
 
+  
