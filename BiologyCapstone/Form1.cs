@@ -260,6 +260,12 @@ namespace BiologyCapstone
                     {
                         //DFS count connected methods
                         DFS(visited, i, j);
+                        //DFS(visited, i, j + 1);
+                        //DFS(visited, i, j - 1);
+                        DFS(visited, i + 1, j);
+                        //DFS(visited, i + 1, j - 1);
+                        //DFS(visited, i - 1, j - 1);
+                        DFS(visited, i - 1, j);                        
                         count ++;           // count = number of components??
                     }
                 }
@@ -284,17 +290,17 @@ namespace BiologyCapstone
             return count;
         }
 
-        public bool [,] DepthFirstSearch(bool [,] array, int starti, int startj, bool[,] visited, int height, int width)
+        public bool [,] DepthFirstSearch(bool [,] array, int starti, int startj, bool[,] visited)
         {
-            for(int i = starti; i < height; i ++) // go +1 and - 1 from each pixel
+            for(int i = starti; i < array.GetLength(0); i ++) // go +1 and - 1 from each pixel
             {
-                for(int j = startj; j < width; j ++)
+                for(int j = startj; j < array.GetLength(1); j ++)
                 {
                     if(array[i, j] == true)
                     {
                         array[i, j] = false;
                         visited[i, j] = true;
-                        DepthFirstSearch(array, i, j, visited, height, width);
+                        DepthFirstSearch(array, i, j, visited);
                     }
                 }
             }
@@ -303,8 +309,27 @@ namespace BiologyCapstone
 
         public void DFS(bool [,] visited, int startX, int startY)
         {            
+            for(int j = startY; j < visited.GetLength(1) && j > -1; j ++)
+            {
+                if(startX > - 1 && startX < visited.GetLength(1) &&visited[startX, j] == true)
+                {
+                    visited[startX, j] = false;
+                    j = j + 1;
+                    DFS(visited, startX, j);
+                }
+            }
+
+            for (int j = startY; j > - 1 && j < visited.GetLength(1); j--)
+            {
+                if (startX > -1 && startX < visited.GetLength(1) && visited[startX, j] == true)
+                {
+                    visited[startX, j] = false;
+                    j = j - 1;
+                    DFS(visited, startX, j);
+                }
+            }
             //i, j
-            if (startX > -1 && startY > -1 && startX < visited.GetLength(0) && startY < visited.GetLength(1) 
+            /*if (startX > -1 && startY > -1 && startX < visited.GetLength(0) && startY < visited.GetLength(1) 
                             && visited[startX, startY] == true)
             {
                 visited[startX, startY] = false;
@@ -316,7 +341,7 @@ namespace BiologyCapstone
                 DFS(visited, startX - 1, startY - 1);         // i - 1, j - 1
                 DFS(visited, startX + 1, startY + 1);         // i + 1, j + 1
                 DFS(visited, startX + 1, startY - 1);         // i + 1, j - 1
-            }
+            }*/
 
         }
 
