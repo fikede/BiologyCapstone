@@ -121,7 +121,7 @@ namespace BiologyCapstone
             //double scaling = Math.Sqrt((byte.MaxValue * byte.MaxValue) + (byte.MaxValue * byte.MaxValue) + 
             // (byte.MaxValue * byte.MaxValue));
             double scaling = Math.Sqrt(byte.MaxValue * byte.MaxValue * 3);
-            scaling = (scaling + scaling) / 100;
+            scaling = scaling / 100;
             double scaledPostion = currentTrackBarPosition * scaling;
             if (EditedImage.Image != null)
             {
