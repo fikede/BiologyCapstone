@@ -239,7 +239,7 @@ namespace BiologyCapstone
                         int blue = currentLine[j + 2];
 
                         double distance = Math.Sqrt((red * red) + (green * green) + (blue * blue));
-                        if (distance > 0) // if the pixel is not black find it's components
+                        if (distance > value) // if the pixel is not black find it's components
                         {
                             nonDarkPixels[i, j] = true;
                         }
@@ -249,58 +249,33 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-           // int average = 0;
             bool [,] visited = new bool[bmp.Height, bmp.Width];
-            visited = nonDarkPixels;
             for (int i = 0; i < bmp.Height; i ++)
             {
                 for(int j = 0; j < bmp.Width; j ++)
                 {
-                    if(visited[i, j])
+                    if(nonDarkPixels[i, j])
                     {
                         //DFS count connected methods
-                        DFS(visited, i, j);
-                        //DFS(visited, i, j + 1);
-                        //DFS(visited, i, j - 1);
-                        DFS(visited, i + 1, j);
-                        //DFS(visited, i + 1, j - 1);
-                        //DFS(visited, i - 1, j - 1);
-                        DFS(visited, i - 1, j);                        
+                        DepthFirstSearch(nonDarkPixels, i, j, visited);                        
                         count ++;           // count = number of components??
                     }
                 }
             }
-
-            /*for (int i = 0; i < bmp.Height; i++)
-            {
-                int oldAverage = average;
-                for (int j = 0; j < bmp.Width; j++)
-                {
-                    if (visited[i, j])
-                    {
-                        average = average + j;
-                    }
-                }
-                if(average != oldAverage)
-                {
-                    average = average + i;
-                }
-            }*/
-            //average = average / count;     //average all the x, y components
             return count;
         }
 
-        public bool [,] DepthFirstSearch(bool [,] array, int starti, int startj, bool[,] visited)
+        public bool [,] DepthFirstSearch(bool [,] nonDarkPixels, int starti, int startj, bool[,] visited)
         {
-            for(int i = starti; i < array.GetLength(0); i ++) // go +1 and - 1 from each pixel
+            visited[starti, startj] = true;
+            for(int i = starti; i < 2; i ++) // go +1 and - 1 from each pixel
             {
-                for(int j = startj; j < array.GetLength(1); j ++)
+                for(int j = startj; j < 2; j ++)
                 {
-                    if(array[i, j] == true)
+                    if(visited[i, j] == false)
                     {
-                        array[i, j] = false;
-                        visited[i, j] = true;
-                        DepthFirstSearch(array, i, j, visited);
+                        nonDarkPixels[i, j] = false;
+                        DepthFirstSearch(nonDarkPixels, i, j, visited);
                     }
                 }
             }
@@ -309,40 +284,7 @@ namespace BiologyCapstone
 
         public void DFS(bool [,] visited, int startX, int startY)
         {            
-            for(int j = startY; j < visited.GetLength(1) && j > -1; j ++)
-            {
-                if(startX > - 1 && startX < visited.GetLength(1) &&visited[startX, j] == true)
-                {
-                    visited[startX, j] = false;
-                    j = j + 1;
-                    DFS(visited, startX, j);
-                }
-            }
-
-            for (int j = startY; j > - 1 && j < visited.GetLength(1); j--)
-            {
-                if (startX > -1 && startX < visited.GetLength(1) && visited[startX, j] == true)
-                {
-                    visited[startX, j] = false;
-                    j = j - 1;
-                    DFS(visited, startX, j);
-                }
-            }
-            //i, j
-            /*if (startX > -1 && startY > -1 && startX < visited.GetLength(0) && startY < visited.GetLength(1) 
-                            && visited[startX, startY] == true)
-            {
-                visited[startX, startY] = false;
-                DFS(visited, startX, startY + 1);         // i, j + 1
-                DFS(visited, startX, startY - 1);         // i, j - 1
-                DFS(visited, startX + 1, startY);         // i + 1, j
-                DFS(visited, startX - 1, startY);         // i - 1, j
-                DFS(visited, startX - 1, startY + 1);         // i - 1, j + 1
-                DFS(visited, startX - 1, startY - 1);         // i - 1, j - 1
-                DFS(visited, startX + 1, startY + 1);         // i + 1, j + 1
-                DFS(visited, startX + 1, startY - 1);         // i + 1, j - 1
-            }*/
-
+                      
         }
 
         
