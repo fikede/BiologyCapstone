@@ -239,7 +239,7 @@ namespace BiologyCapstone
                         int blue = currentLine[j + 2];
 
                         double distance = Math.Sqrt((red * red) + (green * green) + (blue * blue));
-                        if (distance > value) // if the pixel is not black find it's components
+                        if (distance > 0) // if the pixel is not black find it's components
                         {
                             nonDarkPixels[i, j] = true;
                         }
@@ -249,12 +249,12 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-            bool [,] visited = new bool[bmp.Height, bmp.Width];
-            for (int i = 0; i < bmp.Height; i ++)
+            bool [,] visited = new bool[bmp.Height, widthOfPixelsinBytes];
+            for (int i = 0; i < visited.GetLength(0); i ++)
             {
-                for(int j = 0; j < bmp.Width; j ++)
+                for(int j = 0; j < visited.GetLength(1); j ++)
                 {
-                    if(nonDarkPixels[i, j])
+                    if(nonDarkPixels[i, j] && !visited[i,j])
                     {
                         //DFS count connected methods
                         DepthFirstSearch(nonDarkPixels, i, j, visited);                        
@@ -265,16 +265,16 @@ namespace BiologyCapstone
             return count;
         }
 
-        public bool [,] DepthFirstSearch(bool [,] nonDarkPixels, int starti, int startj, bool[,] visited)
+        public bool [,] DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
         {
             visited[starti, startj] = true;
-            for(int i = starti; i < 2; i ++) // go +1 and - 1 from each pixel
+            for(int i = starti - 1; i <= starti + 1; i ++) // go +1 and - 1 from each pixel
             {
-                for(int j = startj; j < 2; j ++)
+                for(int j = startj - 1; j <= startj + 1; j ++)
                 {
-                    if(visited[i, j] == false)
+                    if (i < visited.GetLength(0) && j < visited.GetLength(1) && i >= 0 && j >= 0
+                        && visited[i, j] == false && nonDarkPixels[i, j] == true)
                     {
-                        nonDarkPixels[i, j] = false;
                         DepthFirstSearch(nonDarkPixels, i, j, visited);
                     }
                 }
