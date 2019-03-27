@@ -47,13 +47,13 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(355, 296);
+            this.pictureBox1.Size = new System.Drawing.Size(402, 315);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // LoadImage
             // 
-            this.LoadImage.Location = new System.Drawing.Point(22, 326);
+            this.LoadImage.Location = new System.Drawing.Point(12, 343);
             this.LoadImage.Name = "LoadImage";
             this.LoadImage.Size = new System.Drawing.Size(99, 39);
             this.LoadImage.TabIndex = 1;
@@ -63,7 +63,7 @@
             // 
             // ZoomSlider
             // 
-            this.ZoomSlider.Location = new System.Drawing.Point(528, 377);
+            this.ZoomSlider.Location = new System.Drawing.Point(595, 394);
             this.ZoomSlider.Name = "ZoomSlider";
             this.ZoomSlider.Size = new System.Drawing.Size(250, 45);
             this.ZoomSlider.TabIndex = 2;
@@ -71,7 +71,7 @@
             // 
             // brightnessControl
             // 
-            this.brightnessControl.Location = new System.Drawing.Point(12, 377);
+            this.brightnessControl.Location = new System.Drawing.Point(12, 412);
             this.brightnessControl.Name = "brightnessControl";
             this.brightnessControl.Size = new System.Drawing.Size(250, 45);
             this.brightnessControl.TabIndex = 3;
@@ -79,16 +79,16 @@
             // 
             // EditedImage
             // 
-            this.EditedImage.Location = new System.Drawing.Point(420, 12);
+            this.EditedImage.Location = new System.Drawing.Point(451, 12);
             this.EditedImage.Name = "EditedImage";
-            this.EditedImage.Size = new System.Drawing.Size(351, 296);
+            this.EditedImage.Size = new System.Drawing.Size(402, 315);
             this.EditedImage.TabIndex = 4;
             this.EditedImage.TabStop = false;
             this.EditedImage.Click += new System.EventHandler(this.EditedImage_Click);
             // 
             // numberOfSpots
             // 
-            this.numberOfSpots.Location = new System.Drawing.Point(350, 363);
+            this.numberOfSpots.Location = new System.Drawing.Point(385, 358);
             this.numberOfSpots.Name = "numberOfSpots";
             this.numberOfSpots.Size = new System.Drawing.Size(113, 30);
             this.numberOfSpots.TabIndex = 6;
@@ -97,7 +97,7 @@
             // 
             // Count
             // 
-            this.Count.Location = new System.Drawing.Point(350, 399);
+            this.Count.Location = new System.Drawing.Point(400, 412);
             this.Count.Name = "Count";
             this.Count.Size = new System.Drawing.Size(75, 23);
             this.Count.TabIndex = 7;
@@ -107,7 +107,7 @@
             // 
             // minimumRadius
             // 
-            this.minimumRadius.Location = new System.Drawing.Point(528, 326);
+            this.minimumRadius.Location = new System.Drawing.Point(621, 343);
             this.minimumRadius.Name = "minimumRadius";
             this.minimumRadius.Size = new System.Drawing.Size(224, 45);
             this.minimumRadius.TabIndex = 5;
@@ -117,7 +117,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(815, 434);
+            this.AutoScroll = true;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(865, 463);
             this.Controls.Add(this.Count);
             this.Controls.Add(this.numberOfSpots);
             this.Controls.Add(this.minimumRadius);
@@ -129,6 +131,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize_1);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).EndInit();

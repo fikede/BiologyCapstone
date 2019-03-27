@@ -30,8 +30,8 @@ namespace BiologyCapstone
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
         }
-
-        public void Form1_Resize(object sender, EventArgs e)
+               
+        private void Form1_Resize_1(object sender, EventArgs e)
         {
             float newWidth = this.Width / width;
             float newHeight = this.Height / height;
@@ -40,7 +40,6 @@ namespace BiologyCapstone
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Resize += new EventHandler(Form1_Resize);
             width = this.Width;
             height = this.Height;
             setTarget(this);
@@ -79,13 +78,10 @@ namespace BiologyCapstone
         private void LoadImage_Click(object sender, EventArgs e)
         {
             OpenFileDialog pic = new OpenFileDialog();
-            pic.InitialDirectory = @"C:\Users\FAITH\Pictures\geography";
-            //Filter to show only Files with Image extensions
-            //pic.Filter = "Image Files|*.png;*.jpg;*.bmp";
-            //pic.FilterIndex = 0;
-            DialogResult picResult = pic.ShowDialog();
-            String picLocation = pic.FileName;
-            pictureBox1.ImageLocation = picLocation;
+            if(pic.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                pictureBox1.ImageLocation = pic.FileName;
+            }
             pictureBox1.Load();
             originalImage = pictureBox1.Image;
             PictureZoom_Function(originalImage, new Size(pictureBox1.Width, pictureBox1.Height), pictureBox1);            
@@ -99,10 +95,9 @@ namespace BiologyCapstone
         {
             if(ZoomSlider.Value > 0)
             {
-              //EditedImage.Image = null;
-              //EditedImage.Image = PictureZoom_Function(originalImage, new Size(ZoomSlider.Value, ZoomSlider.Value));
-                PictureZoom_Function(originalImage, new Size(originalImage.Width * ZoomSlider.Value / ZoomSlider.Maximum, 
-                  originalImage. Height * ZoomSlider.Value / ZoomSlider.Maximum), EditedImage);
+                PictureZoom_Function(originalImage, new Size(originalImage.Width * ZoomSlider.Value 
+                    / ZoomSlider.Maximum, originalImage. Height * ZoomSlider.Value / ZoomSlider.Maximum), 
+                    EditedImage);
             }
         }
 
@@ -117,9 +112,6 @@ namespace BiologyCapstone
         private void brightnessControl_Scroll(object sender, EventArgs e)
         {
             int currentTrackBarPosition = brightnessControl.Value;
-            //double scaledPostion = currentTrackBarPosition * 51.2; // Make 51.2 calculated value
-            //double scaling = Math.Sqrt((byte.MaxValue * byte.MaxValue) + (byte.MaxValue * byte.MaxValue) + 
-            // (byte.MaxValue * byte.MaxValue));
             double scaling = Math.Sqrt(byte.MaxValue * byte.MaxValue * 3);
             scaling = scaling / 100;
             double scaledPostion = currentTrackBarPosition * scaling;
@@ -127,7 +119,6 @@ namespace BiologyCapstone
             {
                 //originalImage = EditedImage.Image;
                 Bitmap bmpOriginalImage = new Bitmap(pictureBox1.Image);
-                //EditedImage.Image = AdjustPixelDisplayByBrightness_Function(originalImage, scaledPostion);
                 EditedImage.Image = UsingLockBitsToEditPixels(bmpOriginalImage, scaledPostion);
                 editedImage = EditedImage.Image;
             }            
@@ -249,16 +240,37 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-            bool [,] visited = new bool[bmp.Height, widthOfPixelsinBytes];
+            bool [,] visited = new bool[bmp.Height, widthOfPixelsinBytes];            
+            Stack<Point> result = new Stack<Point> ();
+            Point temp = new Point();
             for (int i = 0; i < visited.GetLength(0); i ++)
             {
                 for(int j = 0; j < visited.GetLength(1); j ++)
                 {
                     if(nonDarkPixels[i, j] && !visited[i,j])
                     {
+                        temp.X = i;
+                        temp.Y = j;
+                        result.Push(temp);
+
+                        /*   
+                         *   visited[i, j] = true;
+                        for(int c = i - 1; i <= i + 1; i ++) // go +1 and - 1 from each pixel
+                        {
+                            for(int d = j - 1; j <= j + 1; j ++)
+                            {
+                                if (c < visited.GetLength(0) && d < visited.GetLength(1) && c >= 0 && d >= 0
+                                && visited[c, d] == false && nonDarkPixels[c, d] == true)
+                                {
+                                    remove from stack???
+                                }
+                            }
+                        }
+                        Or 
+                         */
                         //DFS count connected methods
                         DepthFirstSearch(nonDarkPixels, i, j, visited);                        
-                        count ++;           // count = number of components??
+                        count ++;           // count = number of components
                     }
                 }
             }
@@ -280,14 +292,7 @@ namespace BiologyCapstone
                 }
             }
             return visited;
-        }
-
-        public void DFS(bool [,] visited, int startX, int startY)
-        {            
-                      
-        }
-
-        
+        }              
         
         private void EditedImage_Click(object sender, EventArgs e)
         {
@@ -308,6 +313,8 @@ namespace BiologyCapstone
             int number = numberOfPoints(editedImage, scaledPostion);
             numberOfSpots.Text = number.ToString();
         }
+
+        
     }
 }
 
