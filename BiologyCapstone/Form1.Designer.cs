@@ -79,6 +79,7 @@
             // 
             // EditedImage
             // 
+            this.EditedImage.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.EditedImage.Location = new System.Drawing.Point(451, 12);
             this.EditedImage.Name = "EditedImage";
             this.EditedImage.Size = new System.Drawing.Size(402, 315);

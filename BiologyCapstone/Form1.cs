@@ -208,12 +208,11 @@ namespace BiologyCapstone
             int numBytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(bmp.PixelFormat) / 8;
             int heightOfPixels = imageBmpData.Height;
             int widthOfPixelsinBytes = imageBmpData.Width * numBytesPerPixel;
-            bool[,] nonDarkPixels = new bool[bmp.Height, widthOfPixelsinBytes];
+            bool[,] nonDarkPixels = new bool[bmp.Height, bmp.Width];
             //to use LockBits had to allow unsafe code
             //use LockBit to access pixels with pointers
             unsafe
-            {          
-
+            {  
                 //pointer to adress of first pixel - Scan0 gets/sets address of first pixel in bitmap
                 byte* pointerFirstPixel = (byte*)imageBmpData.Scan0;
 
@@ -232,7 +231,7 @@ namespace BiologyCapstone
                         double distance = Math.Sqrt((red * red) + (green * green) + (blue * blue));
                         if (distance > 0) // if the pixel is not black find it's components
                         {
-                            nonDarkPixels[i, j] = true;
+                            nonDarkPixels[i, j/numBytesPerPixel] = true;
                         }
 
                     }
@@ -240,34 +239,13 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-            bool [,] visited = new bool[bmp.Height, widthOfPixelsinBytes];            
-            Stack<Point> result = new Stack<Point> ();
-            Point temp = new Point();
+            bool [,] visited = new bool[bmp.Height, bmp.Width];                        
             for (int i = 0; i < visited.GetLength(0); i ++)
             {
                 for(int j = 0; j < visited.GetLength(1); j ++)
                 {
                     if(nonDarkPixels[i, j] && !visited[i,j])
                     {
-                        temp.X = i;
-                        temp.Y = j;
-                        result.Push(temp);
-
-                        /*   
-                         *   visited[i, j] = true;
-                        for(int c = i - 1; i <= i + 1; i ++) // go +1 and - 1 from each pixel
-                        {
-                            for(int d = j - 1; j <= j + 1; j ++)
-                            {
-                                if (c < visited.GetLength(0) && d < visited.GetLength(1) && c >= 0 && d >= 0
-                                && visited[c, d] == false && nonDarkPixels[c, d] == true)
-                                {
-                                    remove from stack???
-                                }
-                            }
-                        }
-                        Or 
-                         */
                         //DFS count connected methods
                         DepthFirstSearch(nonDarkPixels, i, j, visited);                        
                         count ++;           // count = number of components
@@ -277,21 +255,33 @@ namespace BiologyCapstone
             return count;
         }
 
-        public bool [,] DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
-        {
-            visited[starti, startj] = true;
-            for(int i = starti - 1; i <= starti + 1; i ++) // go +1 and - 1 from each pixel
-            {
-                for(int j = startj - 1; j <= startj + 1; j ++)
+        public void DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
+        {            
+            Stack<Point> result = new Stack<Point>();
+            Point temp = new Point();
+            temp.X = starti;
+            temp.Y = startj;
+            result.Push(temp);
+            while (result.Count != 0)
+            {                
+                Point newPoint = result.Pop();
+                visited[newPoint.X, newPoint.Y] = true;
+                for (int i = newPoint.X - 1; i <= newPoint.X + 1; i++) // go +1 and - 1 from each pixel
                 {
-                    if (i < visited.GetLength(0) && j < visited.GetLength(1) && i >= 0 && j >= 0
-                        && visited[i, j] == false && nonDarkPixels[i, j] == true)
+                    for (int j = newPoint.Y - 1; j <= newPoint.Y + 1; j++)
                     {
-                        DepthFirstSearch(nonDarkPixels, i, j, visited);
+                        if (i < visited.GetLength(0) && j < visited.GetLength(1) && i >= 0 && j >= 0
+                            && !visited[i, j] && nonDarkPixels[i, j])
+                        {
+                            Point p = new Point(); ;
+                            p.X = i;     //deep copy ?
+                            p.Y = j;
+                            result.Push(p);
+                            //DepthFirstSearch(nonDarkPixels, i, j, visited);
+                        }
                     }
                 }
-            }
-            return visited;
+            }            
         }              
         
         private void EditedImage_Click(object sender, EventArgs e)
