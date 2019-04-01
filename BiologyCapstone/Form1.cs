@@ -19,6 +19,8 @@ namespace BiologyCapstone
         private int zoomCentre = 5;
         public float width;
         public float height;
+        int numberofSpots = 0;
+        int[] numberOfPixelsInSpot;
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace BiologyCapstone
             brightnessControl.Minimum = 0;
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
+            radiusControl.Minimum = 0;
+            radiusControl.Maximum = 10;
         }
                
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -89,6 +93,7 @@ namespace BiologyCapstone
             editedImage = EditedImage.Image;
             ZoomSlider.Value = zoomCentre;
             brightnessControl.Value = 0;
+            radiusControl.Value = 0;
         }
 
         private void ZoomSlider_Scroll(object sender, EventArgs e)
@@ -123,33 +128,11 @@ namespace BiologyCapstone
                 editedImage = EditedImage.Image;
             }            
         }
-        public Image AdjustPixelDisplayByBrightness_Function(Image image, double value)
-        {
-            Bitmap bmp = new Bitmap(image);
-            for(int i = 0; i < bmp.Width; i ++)
-            {                
-                for(int j = 0; j < bmp.Height; j ++)
-                {
-                    Color c = bmp.GetPixel(i, j);
-                    int red = c.R;
-                    int green = c.G;
-                    int blue = c.B;
-                    double distance = Math.Sqrt((red * red) + (green * green) + (blue * blue));
-                    //float pixelBrightness = c.GetBrightness();                    
-                    if (distance < value)
-                    {
-                        c = Color.Black;                                               
-                    }
-                    bmp.SetPixel(i, j, c);
-                }
-            }
-            return bmp;
-        }
 
         public Bitmap UsingLockBitsToEditPixels(Bitmap img, double value)
         {
             Bitmap bmp = img;
-            //to use LockBits had to allow unsafe code
+            //to use LockBits have to allow unsafe code
             //use LockBit to access pixels with pointers
             unsafe
             {
@@ -197,7 +180,7 @@ namespace BiologyCapstone
             
         }       
 
-        public int numberOfPoints(Image img, double value)
+        public int numberOfPoints(Image img)
         {
             Bitmap bmp = new Bitmap(img);
             
@@ -209,17 +192,13 @@ namespace BiologyCapstone
             int heightOfPixels = imageBmpData.Height;
             int widthOfPixelsinBytes = imageBmpData.Width * numBytesPerPixel;
             bool[,] nonDarkPixels = new bool[bmp.Height, bmp.Width];
-            //to use LockBits had to allow unsafe code
-            //use LockBit to access pixels with pointers
             unsafe
             {  
                 //pointer to adress of first pixel - Scan0 gets/sets address of first pixel in bitmap
                 byte* pointerFirstPixel = (byte*)imageBmpData.Scan0;
 
-                //Get the RGB components, check brightness and adjust as necessary
                 for (int i = 0; i < heightOfPixels; i++)
-                {    //.Stride gets/sets scan width of the bitmap object
-                    //use .Stride to go through each line of the image
+                {    
                     byte* currentLine = pointerFirstPixel + (i * imageBmpData.Stride);
                     for (int j = 0; j < widthOfPixelsinBytes; j = j + numBytesPerPixel)
                     {
@@ -233,13 +212,18 @@ namespace BiologyCapstone
                         {
                             nonDarkPixels[i, j/numBytesPerPixel] = true;
                         }
-
                     }
                 }
                 bmp.UnlockBits(imageBmpData);
             }
             int count = 0;
-            bool [,] visited = new bool[bmp.Height, bmp.Width];                        
+            bool [,] visited = new bool[bmp.Height, bmp.Width];
+            numberOfPixelsInSpot = new int[bmp.Height];
+            int maximumSize = numberOfPixelsInSpot.Max();
+            Graphics g = this.EditedImage.CreateGraphics();
+            Pen pen = new Pen(Color.DarkRed);
+            pen.Width = 2;
+            //Point [] p = new Point
             for (int i = 0; i < visited.GetLength(0); i ++)
             {
                 for(int j = 0; j < visited.GetLength(1); j ++)
@@ -247,16 +231,19 @@ namespace BiologyCapstone
                     if(nonDarkPixels[i, j] && !visited[i,j])
                     {
                         //DFS count connected methods
-                        DepthFirstSearch(nonDarkPixels, i, j, visited);                        
+                        numberOfPixelsInSpot[i] =  DepthFirstSearch(nonDarkPixels, i, j, visited);                        
                         count ++;           // count = number of components
+                        g.DrawEllipse(pen, j, i, (numberOfPixelsInSpot[i]/ j ) + count, count + 
+                            (numberOfPixelsInSpot[i] / j));
                     }
                 }
             }
             return count;
         }
 
-        public void DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
-        {            
+        public int DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
+        {
+            int sizeCounter = 0;
             Stack<Point> result = new Stack<Point>();
             Point temp = new Point();
             temp.X = starti;
@@ -274,16 +261,17 @@ namespace BiologyCapstone
                             && !visited[i, j] && nonDarkPixels[i, j])
                         {
                             Point p = new Point(); ;
-                            p.X = i;     //deep copy ?
+                            p.X = i;     
                             p.Y = j;
                             result.Push(p);
-                            //DepthFirstSearch(nonDarkPixels, i, j, visited);
+                            sizeCounter = sizeCounter + 1;
                         }
                     }
                 }
-            }            
-        }              
-        
+            }
+            return sizeCounter;
+        }
+                
         private void EditedImage_Click(object sender, EventArgs e)
         {
 
@@ -296,15 +284,19 @@ namespace BiologyCapstone
 
         private void Count_Click(object sender, EventArgs e)
         {
-            int currentTrackBarPosition = brightnessControl.Value;
-            double scaling = Math.Sqrt(byte.MaxValue * byte.MaxValue * 3);
-            scaling = (scaling + scaling) / 100;
-            double scaledPostion = currentTrackBarPosition * scaling;
-            int number = numberOfPoints(editedImage, scaledPostion);
-            numberOfSpots.Text = number.ToString();
+            numberofSpots = numberOfPoints(editedImage);
+            numberOfSpots.Text = numberofSpots.ToString();
         }
-
-        
+        //make control with two bars
+        private void radiusControl_Scroll(object sender, EventArgs e)
+        {
+            int maxSize = numberOfPixelsInSpot.Max();
+            Bitmap img = new Bitmap(editedImage);
+            for(int i = 0; i < editedImage.Height; i ++)
+            {
+                //compare pixel size
+            }
+        }        
     }
 }
 

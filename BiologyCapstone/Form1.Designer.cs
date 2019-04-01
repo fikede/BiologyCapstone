@@ -36,11 +36,13 @@
             this.numberOfSpots = new System.Windows.Forms.RichTextBox();
             this.Count = new System.Windows.Forms.Button();
             this.minimumRadius = new System.Windows.Forms.TrackBar();
+            this.radiusControl = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radiusControl)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -63,7 +65,7 @@
             // 
             // ZoomSlider
             // 
-            this.ZoomSlider.Location = new System.Drawing.Point(595, 394);
+            this.ZoomSlider.Location = new System.Drawing.Point(621, 430);
             this.ZoomSlider.Name = "ZoomSlider";
             this.ZoomSlider.Size = new System.Drawing.Size(250, 45);
             this.ZoomSlider.TabIndex = 2;
@@ -71,7 +73,7 @@
             // 
             // brightnessControl
             // 
-            this.brightnessControl.Location = new System.Drawing.Point(12, 412);
+            this.brightnessControl.Location = new System.Drawing.Point(12, 395);
             this.brightnessControl.Name = "brightnessControl";
             this.brightnessControl.Size = new System.Drawing.Size(250, 45);
             this.brightnessControl.TabIndex = 3;
@@ -80,7 +82,7 @@
             // EditedImage
             // 
             this.EditedImage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.EditedImage.Location = new System.Drawing.Point(451, 12);
+            this.EditedImage.Location = new System.Drawing.Point(490, 32);
             this.EditedImage.Name = "EditedImage";
             this.EditedImage.Size = new System.Drawing.Size(402, 315);
             this.EditedImage.TabIndex = 4;
@@ -108,11 +110,19 @@
             // 
             // minimumRadius
             // 
-            this.minimumRadius.Location = new System.Drawing.Point(621, 343);
+            this.minimumRadius.Location = new System.Drawing.Point(630, 379);
             this.minimumRadius.Name = "minimumRadius";
             this.minimumRadius.Size = new System.Drawing.Size(224, 45);
             this.minimumRadius.TabIndex = 5;
             this.minimumRadius.Scroll += new System.EventHandler(this.minimumRadius_Scroll);
+            // 
+            // radiusControl
+            // 
+            this.radiusControl.Location = new System.Drawing.Point(12, 446);
+            this.radiusControl.Name = "radiusControl";
+            this.radiusControl.Size = new System.Drawing.Size(250, 45);
+            this.radiusControl.TabIndex = 8;
+            this.radiusControl.Scroll += new System.EventHandler(this.radiusControl_Scroll);
             // 
             // Form1
             // 
@@ -120,7 +130,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(865, 463);
+            this.ClientSize = new System.Drawing.Size(942, 503);
+            this.Controls.Add(this.radiusControl);
             this.Controls.Add(this.Count);
             this.Controls.Add(this.numberOfSpots);
             this.Controls.Add(this.minimumRadius);
@@ -138,6 +149,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radiusControl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,6 +165,7 @@
         private System.Windows.Forms.RichTextBox numberOfSpots;
         private System.Windows.Forms.Button Count;
         private System.Windows.Forms.TrackBar minimumRadius;
+        private System.Windows.Forms.TrackBar radiusControl;
     }
 }
 
