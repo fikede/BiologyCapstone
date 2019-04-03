@@ -37,6 +37,10 @@
             this.Count = new System.Windows.Forms.Button();
             this.minimumRadius = new System.Windows.Forms.TrackBar();
             this.radiusControl = new System.Windows.Forms.TrackBar();
+            this.Maximize = new System.Windows.Forms.Label();
+            this.Minimize = new System.Windows.Forms.Label();
+            this.Zoom = new System.Windows.Forms.Label();
+            this.Brightness = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).BeginInit();
@@ -65,7 +69,7 @@
             // 
             // ZoomSlider
             // 
-            this.ZoomSlider.Location = new System.Drawing.Point(621, 430);
+            this.ZoomSlider.Location = new System.Drawing.Point(642, 374);
             this.ZoomSlider.Name = "ZoomSlider";
             this.ZoomSlider.Size = new System.Drawing.Size(250, 45);
             this.ZoomSlider.TabIndex = 2;
@@ -73,7 +77,7 @@
             // 
             // brightnessControl
             // 
-            this.brightnessControl.Location = new System.Drawing.Point(12, 395);
+            this.brightnessControl.Location = new System.Drawing.Point(642, 446);
             this.brightnessControl.Name = "brightnessControl";
             this.brightnessControl.Size = new System.Drawing.Size(250, 45);
             this.brightnessControl.TabIndex = 3;
@@ -110,7 +114,7 @@
             // 
             // minimumRadius
             // 
-            this.minimumRadius.Location = new System.Drawing.Point(630, 379);
+            this.minimumRadius.Location = new System.Drawing.Point(12, 441);
             this.minimumRadius.Name = "minimumRadius";
             this.minimumRadius.Size = new System.Drawing.Size(224, 45);
             this.minimumRadius.TabIndex = 5;
@@ -118,11 +122,47 @@
             // 
             // radiusControl
             // 
-            this.radiusControl.Location = new System.Drawing.Point(12, 446);
+            this.radiusControl.Location = new System.Drawing.Point(12, 390);
             this.radiusControl.Name = "radiusControl";
             this.radiusControl.Size = new System.Drawing.Size(250, 45);
             this.radiusControl.TabIndex = 8;
             this.radiusControl.Scroll += new System.EventHandler(this.radiusControl_Scroll);
+            // 
+            // Maximize
+            // 
+            this.Maximize.AutoSize = true;
+            this.Maximize.Location = new System.Drawing.Point(268, 390);
+            this.Maximize.Name = "Maximize";
+            this.Maximize.Size = new System.Drawing.Size(50, 13);
+            this.Maximize.TabIndex = 9;
+            this.Maximize.Text = "Maximize";
+            // 
+            // Minimize
+            // 
+            this.Minimize.AutoSize = true;
+            this.Minimize.Location = new System.Drawing.Point(268, 446);
+            this.Minimize.Name = "Minimize";
+            this.Minimize.Size = new System.Drawing.Size(47, 13);
+            this.Minimize.TabIndex = 10;
+            this.Minimize.Text = "Minimize";
+            // 
+            // Zoom
+            // 
+            this.Zoom.AutoSize = true;
+            this.Zoom.Location = new System.Drawing.Point(599, 390);
+            this.Zoom.Name = "Zoom";
+            this.Zoom.Size = new System.Drawing.Size(34, 13);
+            this.Zoom.TabIndex = 11;
+            this.Zoom.Text = "Zoom";
+            // 
+            // Brightness
+            // 
+            this.Brightness.AutoSize = true;
+            this.Brightness.Location = new System.Drawing.Point(577, 455);
+            this.Brightness.Name = "Brightness";
+            this.Brightness.Size = new System.Drawing.Size(56, 13);
+            this.Brightness.TabIndex = 12;
+            this.Brightness.Text = "Brightness";
             // 
             // Form1
             // 
@@ -131,6 +171,10 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(942, 503);
+            this.Controls.Add(this.Brightness);
+            this.Controls.Add(this.Zoom);
+            this.Controls.Add(this.Minimize);
+            this.Controls.Add(this.Maximize);
             this.Controls.Add(this.radiusControl);
             this.Controls.Add(this.Count);
             this.Controls.Add(this.numberOfSpots);
@@ -166,6 +210,10 @@
         private System.Windows.Forms.Button Count;
         private System.Windows.Forms.TrackBar minimumRadius;
         private System.Windows.Forms.TrackBar radiusControl;
+        private System.Windows.Forms.Label Maximize;
+        private System.Windows.Forms.Label Minimize;
+        private System.Windows.Forms.Label Zoom;
+        private System.Windows.Forms.Label Brightness;
     }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Collections;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace BiologyCapstone
         public float width;
         public float height;
         int numberofSpots = 0;
-        int[] numberOfPixelsInSpot;
         public Form1()
         {
             InitializeComponent();
@@ -31,8 +31,10 @@ namespace BiologyCapstone
             brightnessControl.Minimum = 0;
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
-            radiusControl.Minimum = 0;
-            radiusControl.Maximum = 10;
+            radiusControl.Minimum = 1;
+            radiusControl.Maximum = 100;
+            minimumRadius.Minimum = 1;
+            minimumRadius.Maximum = 100;
         }
                
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -93,7 +95,8 @@ namespace BiologyCapstone
             editedImage = EditedImage.Image;
             ZoomSlider.Value = zoomCentre;
             brightnessControl.Value = 0;
-            radiusControl.Value = 0;
+            radiusControl.Value = 1;
+            minimumRadius.Value = 1;
         }
 
         private void ZoomSlider_Scroll(object sender, EventArgs e)
@@ -218,12 +221,13 @@ namespace BiologyCapstone
             }
             int count = 0;
             bool [,] visited = new bool[bmp.Height, bmp.Width];
-            numberOfPixelsInSpot = new int[bmp.Height];
-            int maximumSize = numberOfPixelsInSpot.Max();
-            Graphics g = this.EditedImage.CreateGraphics();
-            Pen pen = new Pen(Color.DarkRed);
-            pen.Width = 2;
-            //Point [] p = new Point
+            //int[] numberOfPixelsInSpot = new int[bmp.Height];
+            List<PointF> p = new List<PointF>();
+            List<Spot> spots = new List<Spot>();
+            Spot s = new Spot();
+            Point pen = new Point();
+            List<Int32> numberOfPixelsInSpot = new List<Int32>();
+            
             for (int i = 0; i < visited.GetLength(0); i ++)
             {
                 for(int j = 0; j < visited.GetLength(1); j ++)
@@ -231,14 +235,58 @@ namespace BiologyCapstone
                     if(nonDarkPixels[i, j] && !visited[i,j])
                     {
                         //DFS count connected methods
-                        numberOfPixelsInSpot[i] =  DepthFirstSearch(nonDarkPixels, i, j, visited);                        
-                        count ++;           // count = number of components
-                        g.DrawEllipse(pen, j, i, (numberOfPixelsInSpot[i]/ j ) + count, count + 
-                            (numberOfPixelsInSpot[i] / j));
+                        int temp =  DepthFirstSearch(nonDarkPixels, i, j, visited);
+                        numberOfPixelsInSpot.Add(temp);
+                        pen.X = j;
+                        pen.Y = i;
+                        //p.Add(pen);
+                        s.setCentrePoint(pen);
+                        s.setNumberOfSpots(temp);
+                        spots.Add(s);
+                        //count ++;           // count = number of components
+                        //g.DrawEllipse(pen, j, i, numberOfPixelsInSpot[i], numberOfPixelsInSpot[i]);
                     }
                 }
             }
+            int l = spots.Count;
+            for (int i = 0; i < spots.Count; i++)
+            {
+                if (spots[i].getNumberOfSpots() <= radiusControl.Value &&
+                            numberOfPixelsInSpot[i] >= minimumRadius.Value)
+                {
+                    spots[i].setNumberOfSpots(1);
+                }
+                else if (spots[i].getNumberOfSpots() > radiusControl.Value)
+                {
+                    // something is wrong how to scale with max radius
+                    int f = spots[i].getNumberOfSpots() / radiusControl.Value;  
+                    spots[i].setNumberOfSpots(f);
+                }
+                else if (spots[i].getNumberOfSpots() < minimumRadius.Value)
+                {
+                    spots[i].setNumberOfSpots(0);
+                }
+                count += spots[i].getNumberOfSpots();                
+            }
+            int y = Draw(visited, spots, count);
             return count;
+        }
+
+        public int Draw(bool[,] visited, List<Spot> spots, int count)
+        {
+            int x = 0;
+            Graphics g = this.EditedImage.CreateGraphics();
+            Pen pen = new Pen(Color.DarkRed);
+            pen.Width = 3;
+            for (int c = 0; c < spots.Count; c++)
+            {
+                if (spots[c].getNumberOfSpots() > 0)
+                {
+                    g.DrawEllipse(pen, spots[c].getCentrePointX(), spots[c].getCentrePointY(), 
+                        spots[c].getNumberOfSpots()/ count, spots[c].getNumberOfSpots() / count);
+                }
+            }
+            return x;
         }
 
         public int DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
@@ -264,7 +312,7 @@ namespace BiologyCapstone
                             p.X = i;     
                             p.Y = j;
                             result.Push(p);
-                            sizeCounter = sizeCounter + 1;
+                            sizeCounter ++;
                         }
                     }
                 }
@@ -287,15 +335,10 @@ namespace BiologyCapstone
             numberofSpots = numberOfPoints(editedImage);
             numberOfSpots.Text = numberofSpots.ToString();
         }
-        //make control with two bars
+        //make control with two bars ??
         private void radiusControl_Scroll(object sender, EventArgs e)
         {
-            int maxSize = numberOfPixelsInSpot.Max();
-            Bitmap img = new Bitmap(editedImage);
-            for(int i = 0; i < editedImage.Height; i ++)
-            {
-                //compare pixel size
-            }
+            
         }        
     }
 }
