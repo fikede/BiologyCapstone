@@ -34,19 +34,21 @@
             this.brightnessControl = new System.Windows.Forms.TrackBar();
             this.EditedImage = new System.Windows.Forms.PictureBox();
             this.numberOfSpots = new System.Windows.Forms.RichTextBox();
-            this.Count = new System.Windows.Forms.Button();
+            this.CountByBrightness = new System.Windows.Forms.Button();
             this.minimumRadius = new System.Windows.Forms.TrackBar();
-            this.radiusControl = new System.Windows.Forms.TrackBar();
+            this.maximumRadius = new System.Windows.Forms.TrackBar();
             this.Maximize = new System.Windows.Forms.Label();
             this.Minimize = new System.Windows.Forms.Label();
             this.Zoom = new System.Windows.Forms.Label();
             this.Brightness = new System.Windows.Forms.Label();
+            this.adjustedCountByRadius = new System.Windows.Forms.RichTextBox();
+            this.CountByRadius = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radiusControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maximumRadius)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -86,9 +88,10 @@
             // EditedImage
             // 
             this.EditedImage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.EditedImage.Location = new System.Drawing.Point(490, 32);
+            this.EditedImage.Location = new System.Drawing.Point(502, 12);
             this.EditedImage.Name = "EditedImage";
             this.EditedImage.Size = new System.Drawing.Size(402, 315);
+            this.EditedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.EditedImage.TabIndex = 4;
             this.EditedImage.TabStop = false;
             this.EditedImage.Click += new System.EventHandler(this.EditedImage_Click);
@@ -102,15 +105,15 @@
             this.numberOfSpots.Text = "";
             this.numberOfSpots.TextChanged += new System.EventHandler(this.numberOfSpots_TextChanged);
             // 
-            // Count
+            // CountByBrightness
             // 
-            this.Count.Location = new System.Drawing.Point(400, 412);
-            this.Count.Name = "Count";
-            this.Count.Size = new System.Drawing.Size(75, 23);
-            this.Count.TabIndex = 7;
-            this.Count.Text = "Count";
-            this.Count.UseVisualStyleBackColor = true;
-            this.Count.Click += new System.EventHandler(this.Count_Click);
+            this.CountByBrightness.Location = new System.Drawing.Point(388, 394);
+            this.CountByBrightness.Name = "CountByBrightness";
+            this.CountByBrightness.Size = new System.Drawing.Size(110, 23);
+            this.CountByBrightness.TabIndex = 7;
+            this.CountByBrightness.Text = "CountByBrightness";
+            this.CountByBrightness.UseVisualStyleBackColor = true;
+            this.CountByBrightness.Click += new System.EventHandler(this.Count_Click);
             // 
             // minimumRadius
             // 
@@ -120,13 +123,13 @@
             this.minimumRadius.TabIndex = 5;
             this.minimumRadius.Scroll += new System.EventHandler(this.minimumRadius_Scroll);
             // 
-            // radiusControl
+            // maximumRadius
             // 
-            this.radiusControl.Location = new System.Drawing.Point(12, 390);
-            this.radiusControl.Name = "radiusControl";
-            this.radiusControl.Size = new System.Drawing.Size(250, 45);
-            this.radiusControl.TabIndex = 8;
-            this.radiusControl.Scroll += new System.EventHandler(this.radiusControl_Scroll);
+            this.maximumRadius.Location = new System.Drawing.Point(12, 390);
+            this.maximumRadius.Name = "maximumRadius";
+            this.maximumRadius.Size = new System.Drawing.Size(250, 45);
+            this.maximumRadius.TabIndex = 8;
+            this.maximumRadius.Scroll += new System.EventHandler(this.radiusControl_Scroll);
             // 
             // Maximize
             // 
@@ -164,6 +167,24 @@
             this.Brightness.TabIndex = 12;
             this.Brightness.Text = "Brightness";
             // 
+            // adjustedCountByRadius
+            // 
+            this.adjustedCountByRadius.Location = new System.Drawing.Point(385, 434);
+            this.adjustedCountByRadius.Name = "adjustedCountByRadius";
+            this.adjustedCountByRadius.Size = new System.Drawing.Size(113, 34);
+            this.adjustedCountByRadius.TabIndex = 13;
+            this.adjustedCountByRadius.Text = "";
+            // 
+            // CountByRadius
+            // 
+            this.CountByRadius.Location = new System.Drawing.Point(399, 474);
+            this.CountByRadius.Name = "CountByRadius";
+            this.CountByRadius.Size = new System.Drawing.Size(99, 23);
+            this.CountByRadius.TabIndex = 14;
+            this.CountByRadius.Text = "CountByRadius";
+            this.CountByRadius.UseVisualStyleBackColor = true;
+            this.CountByRadius.Click += new System.EventHandler(this.CountByRadius_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,12 +192,14 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(942, 503);
+            this.Controls.Add(this.CountByRadius);
+            this.Controls.Add(this.adjustedCountByRadius);
             this.Controls.Add(this.Brightness);
             this.Controls.Add(this.Zoom);
             this.Controls.Add(this.Minimize);
             this.Controls.Add(this.Maximize);
-            this.Controls.Add(this.radiusControl);
-            this.Controls.Add(this.Count);
+            this.Controls.Add(this.maximumRadius);
+            this.Controls.Add(this.CountByBrightness);
             this.Controls.Add(this.numberOfSpots);
             this.Controls.Add(this.minimumRadius);
             this.Controls.Add(this.EditedImage);
@@ -193,7 +216,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.brightnessControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EditedImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minimumRadius)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radiusControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maximumRadius)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,13 +230,15 @@
         private System.Windows.Forms.TrackBar brightnessControl;
         private System.Windows.Forms.PictureBox EditedImage;
         private System.Windows.Forms.RichTextBox numberOfSpots;
-        private System.Windows.Forms.Button Count;
+        private System.Windows.Forms.Button CountByBrightness;
         private System.Windows.Forms.TrackBar minimumRadius;
-        private System.Windows.Forms.TrackBar radiusControl;
+        private System.Windows.Forms.TrackBar maximumRadius;
         private System.Windows.Forms.Label Maximize;
         private System.Windows.Forms.Label Minimize;
         private System.Windows.Forms.Label Zoom;
         private System.Windows.Forms.Label Brightness;
+        private System.Windows.Forms.RichTextBox adjustedCountByRadius;
+        private System.Windows.Forms.Button CountByRadius;
     }
 }
 

@@ -16,24 +16,29 @@ namespace BiologyCapstone
     public class Spot
     {
         //Point centrePoint;
-        public int numberOfSpots;
+        public int numberOfPixelsInASpot;
         public Point centrePoint;
+        public int numberOfComponents;
         public Spot()
         {
             centrePoint.X = 0;
             centrePoint.Y = 0;
-            numberOfSpots = 0;
+            numberOfPixelsInASpot = 0;
+            numberOfComponents = 0;
         }
-        public Spot(Point centrePoint, int numberOfSpots)
+        public Spot(Point centrePoint, int numberOfPixelsInASpot, int numberOfComponents)
         {
             this.centrePoint = centrePoint;
-            this.numberOfSpots = numberOfSpots;
+            this.numberOfPixelsInASpot = numberOfPixelsInASpot;
+            this.numberOfComponents = numberOfComponents;
         }
-        public Spot(int centrePointX, int centrePointY, int numberOfSpots)
+        public Spot(int centrePointX, int centrePointY, int numberOfPixelsInASpot, 
+            int numberOfComponents)
         {
             this.centrePoint.X = centrePointX;
             this.centrePoint.Y = centrePointY;
-            this.numberOfSpots = numberOfSpots;
+            this.numberOfPixelsInASpot = numberOfPixelsInASpot;
+            this.numberOfComponents = numberOfComponents;
         }
         public void setCentrePoint(Point centrePoint)
         {
@@ -52,9 +57,13 @@ namespace BiologyCapstone
         {
             this.centrePoint.Y = centrePointY;
         }
-        public void setNumberOfSpots(int numberOfSpots)
+        public void setNumberOfPixelsInASpot(int numberOfPixelsInASpot)
         {
-            this.numberOfSpots = numberOfSpots;
+            this.numberOfPixelsInASpot = numberOfPixelsInASpot;
+        }
+        public void setNumberOfComponents(int numberOfComponents)
+        {
+            this.numberOfComponents = numberOfComponents;
         }
 
         public Point getCentrePoint()
@@ -69,12 +78,14 @@ namespace BiologyCapstone
         {
             return centrePoint.Y;
         }
-        public int getNumberOfSpots()
+        public int getNumberOfPixelsInASpot()
         {
-             return numberOfSpots;
+             return numberOfPixelsInASpot;
         }
-
-
+        public int getNumberOfComponents()
+        {
+            return numberOfComponents;
+        }
     }
 
 }

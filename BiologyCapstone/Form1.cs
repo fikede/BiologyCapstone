@@ -20,7 +20,7 @@ namespace BiologyCapstone
         private int zoomCentre = 5;
         public float width;
         public float height;
-        int numberofSpots = 0;
+        int []numOfSpots = new int[2];
         public Form1()
         {
             InitializeComponent();
@@ -31,10 +31,10 @@ namespace BiologyCapstone
             brightnessControl.Minimum = 0;
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
-            radiusControl.Minimum = 1;
-            radiusControl.Maximum = 100;
+            maximumRadius.Minimum = 1;
+            maximumRadius.Maximum = 50;
             minimumRadius.Minimum = 1;
-            minimumRadius.Maximum = 100;
+            minimumRadius.Maximum = 50;
         }
                
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace BiologyCapstone
             editedImage = EditedImage.Image;
             ZoomSlider.Value = zoomCentre;
             brightnessControl.Value = 0;
-            radiusControl.Value = 1;
+            maximumRadius.Value = 1;
             minimumRadius.Value = 1;
         }
 
@@ -180,13 +180,12 @@ namespace BiologyCapstone
        
        private void minimumRadius_Scroll(object sender, EventArgs e)
         {
-            
+            EditedImage.ResetText();
         }       
 
-        public int numberOfPoints(Image img)
+        public int[] numberOfPoints(Image img)
         {
-            Bitmap bmp = new Bitmap(img);
-            
+            Bitmap bmp = new Bitmap(img);            
             BitmapData imageBmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                    ImageLockMode.ReadWrite, bmp.PixelFormat);
 
@@ -221,12 +220,7 @@ namespace BiologyCapstone
             }
             int count = 0;
             bool [,] visited = new bool[bmp.Height, bmp.Width];
-            //int[] numberOfPixelsInSpot = new int[bmp.Height];
-            List<PointF> p = new List<PointF>();
-            List<Spot> spots = new List<Spot>();
-            Spot s = new Spot();
-            Point pen = new Point();
-            List<Int32> numberOfPixelsInSpot = new List<Int32>();
+            List<Spot> spots = new List<Spot>();                 
             
             for (int i = 0; i < visited.GetLength(0); i ++)
             {
@@ -235,72 +229,86 @@ namespace BiologyCapstone
                     if(nonDarkPixels[i, j] && !visited[i,j])
                     {
                         //DFS count connected methods
-                        int temp =  DepthFirstSearch(nonDarkPixels, i, j, visited);
-                        numberOfPixelsInSpot.Add(temp);
-                        pen.X = j;
-                        pen.Y = i;
-                        //p.Add(pen);
-                        s.setCentrePoint(pen);
-                        s.setNumberOfSpots(temp);
+                        Spot s =  DepthFirstSearch(nonDarkPixels, i, j, visited);
+                        count++;           // count = number of components in the whole image
                         spots.Add(s);
-                        //count ++;           // count = number of components
-                        //g.DrawEllipse(pen, j, i, numberOfPixelsInSpot[i], numberOfPixelsInSpot[i]);
+                        
                     }
                 }
             }
-            int l = spots.Count;
+            int[] counter = new int[2];
+            counter[0] = spots.Count;
+            counter[1] = numberOfSpotsBasedOnRadius(spots);
+            return counter;
+        }
+
+        public int numberOfSpotsBasedOnRadius(List<Spot> spots)
+        {
+            int count = 0;
             for (int i = 0; i < spots.Count; i++)
             {
-                if (spots[i].getNumberOfSpots() <= radiusControl.Value &&
-                            numberOfPixelsInSpot[i] >= minimumRadius.Value)
+                if (spots[i].getNumberOfPixelsInASpot() <= maximumRadius.Value &&
+                            spots[i].getNumberOfPixelsInASpot() >= minimumRadius.Value)
                 {
-                    spots[i].setNumberOfSpots(1);
+                    spots[i].setNumberOfComponents(1);
                 }
-                else if (spots[i].getNumberOfSpots() > radiusControl.Value)
+                else if (spots[i].getNumberOfPixelsInASpot() > maximumRadius.Value)
                 {
-                    // something is wrong how to scale with max radius
-                    int f = spots[i].getNumberOfSpots() / radiusControl.Value;  
-                    spots[i].setNumberOfSpots(f);
+                    int f = spots[i].getNumberOfPixelsInASpot();    //scaling with radius ??
+                    f = spots[i].getNumberOfPixelsInASpot() % maximumRadius.Value;
+                    spots[i].setNumberOfComponents(f);
                 }
-                else if (spots[i].getNumberOfSpots() < minimumRadius.Value)
+                else if (spots[i].getNumberOfPixelsInASpot() < minimumRadius.Value)
                 {
-                    spots[i].setNumberOfSpots(0);
+                    spots[i].setNumberOfComponents(0);
                 }
-                count += spots[i].getNumberOfSpots();                
-            }
-            int y = Draw(visited, spots, count);
+                count += spots[i].getNumberOfComponents();
+            }   
+            Draw(spots);
             return count;
         }
 
-        public int Draw(bool[,] visited, List<Spot> spots, int count)
+        public void Draw(List<Spot> spots)
         {
-            int x = 0;
-            Graphics g = this.EditedImage.CreateGraphics();
-            Pen pen = new Pen(Color.DarkRed);
-            pen.Width = 3;
+            //still need to clear text before writing new text
+            Graphics g = this.EditedImage.CreateGraphics();               
+            Font arialFont = new Font("Arial", 10, FontStyle.Bold);
             for (int c = 0; c < spots.Count; c++)
             {
-                if (spots[c].getNumberOfSpots() > 0)
+                if (spots[c].getNumberOfComponents() > 0)
                 {
-                    g.DrawEllipse(pen, spots[c].getCentrePointX(), spots[c].getCentrePointY(), 
-                        spots[c].getNumberOfSpots()/ count, spots[c].getNumberOfSpots() / count);
+                    /*g.DrawEllipse(pen, spots[c].getCentrePointY(), spots[c].getCentrePointX(),
+                        spots[c].getNumberOfComponents(),
+                        spots[c].getNumberOfComponents());*/
+
+                    //Now I'm just writing the number near/beside the spot instead of drawing
+                    string text = spots[c].getNumberOfComponents().ToString();
+                    Point p = new Point();
+                    p.X = spots[c].getCentrePointY();
+                    p.Y = spots[c].getCentrePointX();
+                    g.DrawString(text, arialFont, Brushes.Yellow, p);
                 }
             }
-            return x;
         }
 
-        public int DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
-        {
-            int sizeCounter = 0;
+        public Spot DepthFirstSearch(bool [, ] nonDarkPixels, int starti, int startj, bool[,] visited)
+        {//return a spot instead
+            int countX = 0;
+            int countY = 0;
+            int countOfPixelsInASpot = 0;
+            int averageX = 0;
+            int averageY = 0;
             Stack<Point> result = new Stack<Point>();
             Point temp = new Point();
             temp.X = starti;
             temp.Y = startj;
             result.Push(temp);
             while (result.Count != 0)
-            {                
+            {              
                 Point newPoint = result.Pop();
+                //find centre point, finding average x and y values
                 visited[newPoint.X, newPoint.Y] = true;
+                // i = height = y, j = width = x
                 for (int i = newPoint.X - 1; i <= newPoint.X + 1; i++) // go +1 and - 1 from each pixel
                 {
                     for (int j = newPoint.Y - 1; j <= newPoint.Y + 1; j++)
@@ -312,12 +320,26 @@ namespace BiologyCapstone
                             p.X = i;     
                             p.Y = j;
                             result.Push(p);
-                            sizeCounter ++;
+                            averageX += i;
+                            averageY += j;
+                            countX ++;
+                            countY ++;
+                            countOfPixelsInASpot++;
                         }
                     }
                 }
             }
-            return sizeCounter;
+            Spot sp = new Spot();
+            if(countX > 0 && countY > 0)
+            {
+                averageX = averageX / countX;
+                averageY = averageY / countY;
+            }
+            
+            Point centrePoint = new Point(averageX, averageY);
+            sp.setCentrePoint(centrePoint);
+            sp.setNumberOfPixelsInASpot(countOfPixelsInASpot);
+            return sp;
         }
                 
         private void EditedImage_Click(object sender, EventArgs e)
@@ -332,14 +354,26 @@ namespace BiologyCapstone
 
         private void Count_Click(object sender, EventArgs e)
         {
-            numberofSpots = numberOfPoints(editedImage);
-            numberOfSpots.Text = numberofSpots.ToString();
+            numOfSpots = numberOfPoints(editedImage);
+            int num = numOfSpots[0];
+            numberOfSpots.Text = num.ToString();
+            num = numOfSpots[1];
+            adjustedCountByRadius.Text = num.ToString();            
         }
         //make control with two bars ??
         private void radiusControl_Scroll(object sender, EventArgs e)
         {
-            
-        }        
+
+        }
+
+        private void CountByRadius_Click(object sender, EventArgs e)
+        {
+            numOfSpots = numberOfPoints(editedImage);
+            int num = numOfSpots[0];
+            numberOfSpots.Text = num.ToString();
+            num = numOfSpots[1];
+            adjustedCountByRadius.Text = num.ToString();
+        }
     }
 }
 
