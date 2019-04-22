@@ -31,10 +31,10 @@ namespace BiologyCapstone
             brightnessControl.Minimum = 0;
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
-            maximumRadius.Minimum = 1;
-            maximumRadius.Maximum = 50;
-            minimumRadius.Minimum = 1;
-            minimumRadius.Maximum = 50;
+            maximumRadius.Minimum = 0;
+            maximumRadius.Maximum = 100;
+            minimumRadius.Minimum = 0;
+            minimumRadius.Maximum = 100;
         }
                
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -97,6 +97,8 @@ namespace BiologyCapstone
             brightnessControl.Value = 0;
             maximumRadius.Value = 1;
             minimumRadius.Value = 1;
+            ZoomSlider.Hide();
+            Zoom.Hide();
         }
 
         private void ZoomSlider_Scroll(object sender, EventArgs e)
@@ -175,14 +177,8 @@ namespace BiologyCapstone
                 bmp.UnlockBits(imageBmpData);
             }            
             return bmp;
-        }
-
-       
-       private void minimumRadius_Scroll(object sender, EventArgs e)
-        {
-            EditedImage.ResetText();
-        }       
-
+        }    
+         
         public int[] numberOfPoints(Image img)
         {
             Bitmap bmp = new Bitmap(img);            
@@ -247,21 +243,24 @@ namespace BiologyCapstone
             int count = 0;
             for (int i = 0; i < spots.Count; i++)
             {
-                if (spots[i].getNumberOfPixelsInASpot() <= maximumRadius.Value &&
-                            spots[i].getNumberOfPixelsInASpot() >= minimumRadius.Value)
-                {
-                    spots[i].setNumberOfComponents(1);
-                }
-                else if (spots[i].getNumberOfPixelsInASpot() > maximumRadius.Value)
-                {
-                    int f = spots[i].getNumberOfPixelsInASpot();    //scaling with radius ??
-                    f = spots[i].getNumberOfPixelsInASpot() % maximumRadius.Value;
-                    spots[i].setNumberOfComponents(f);
-                }
-                else if (spots[i].getNumberOfPixelsInASpot() < minimumRadius.Value)
+                if (spots[i].getNumberOfPixelsInASpot() < calculateSliderValue(minimumRadius.Value))
                 {
                     spots[i].setNumberOfComponents(0);
                 }
+                else if (spots[i].getNumberOfPixelsInASpot() <= calculateSliderValue(maximumRadius.Value) 
+                    && spots[i].getNumberOfPixelsInASpot() >= calculateSliderValue(minimumRadius.Value))
+                {
+                    spots[i].setNumberOfComponents(1);
+                }
+                
+                else if (spots[i].getNumberOfPixelsInASpot() > calculateSliderValue(maximumRadius.Value))
+                {
+                    int f = spots[i].getNumberOfPixelsInASpot();    //scaling with radius ??
+                    f = (int) (spots[i].getNumberOfPixelsInASpot() 
+                        / calculateSliderValue(maximumRadius.Value));
+                    spots[i].setNumberOfComponents(f);
+                }
+                
                 count += spots[i].getNumberOfComponents();
             }   
             Draw(spots);
@@ -270,23 +269,18 @@ namespace BiologyCapstone
 
         public void Draw(List<Spot> spots)
         {
-            //still need to clear text before writing new text
-            Graphics g = this.EditedImage.CreateGraphics();               
+            Graphics g = this.EditedImage.CreateGraphics();    
             Font arialFont = new Font("Arial", 10, FontStyle.Bold);
             for (int c = 0; c < spots.Count; c++)
             {
                 if (spots[c].getNumberOfComponents() > 0)
                 {
-                    /*g.DrawEllipse(pen, spots[c].getCentrePointY(), spots[c].getCentrePointX(),
-                        spots[c].getNumberOfComponents(),
-                        spots[c].getNumberOfComponents());*/
-
                     //Now I'm just writing the number near/beside the spot instead of drawing
                     string text = spots[c].getNumberOfComponents().ToString();
                     Point p = new Point();
                     p.X = spots[c].getCentrePointY();
                     p.Y = spots[c].getCentrePointX();
-                    g.DrawString(text, arialFont, Brushes.Yellow, p);
+                    g.DrawString(text, arialFont, Brushes.OrangeRed, p);
                 }
             }
         }
@@ -308,6 +302,11 @@ namespace BiologyCapstone
                 Point newPoint = result.Pop();
                 //find centre point, finding average x and y values
                 visited[newPoint.X, newPoint.Y] = true;
+                averageX += newPoint.X;
+                averageY += newPoint.Y;
+                countX++;
+                countY++;
+                countOfPixelsInASpot++;
                 // i = height = y, j = width = x
                 for (int i = newPoint.X - 1; i <= newPoint.X + 1; i++) // go +1 and - 1 from each pixel
                 {
@@ -319,22 +318,14 @@ namespace BiologyCapstone
                             Point p = new Point(); ;
                             p.X = i;     
                             p.Y = j;
-                            result.Push(p);
-                            averageX += i;
-                            averageY += j;
-                            countX ++;
-                            countY ++;
-                            countOfPixelsInASpot++;
+                            result.Push(p);                            
                         }
                     }
                 }
             }
             Spot sp = new Spot();
-            if(countX > 0 && countY > 0)
-            {
-                averageX = averageX / countX;
-                averageY = averageY / countY;
-            }
+            averageX = averageX / countX;
+            averageY = averageY / countY;
             
             Point centrePoint = new Point(averageX, averageY);
             sp.setCentrePoint(centrePoint);
@@ -356,23 +347,88 @@ namespace BiologyCapstone
         {
             numOfSpots = numberOfPoints(editedImage);
             int num = numOfSpots[0];
-            numberOfSpots.Text = num.ToString();
+            brightnessCount.Text = num.ToString();
             num = numOfSpots[1];
-            adjustedCountByRadius.Text = num.ToString();            
+            countByRadius.Text = num.ToString();                        
         }
-        //make control with two bars ??
+
+        private void minimumRadius_Scroll(object sender, EventArgs e)
+        {
+            brightnessControl_Scroll(null, null);
+            minimumSize.BackColor = Color.Black;
+            Graphics g = this.minimumSize.CreateGraphics();
+            g.Clear(minimumSize.BackColor);
+            
+            Pen p = new Pen(Brushes.Green);
+            p.Width = 1;
+            Rectangle rect = new Rectangle();
+            rect.X = minimumSize.Width / 2;
+            rect.Y = minimumSize.Height / 2;
+
+            double sliderValue = calculateSliderValue(minimumRadius.Value);
+            int radius = (int)Math.Sqrt(sliderValue / Math.PI);
+            rect.Width = radius * 2;
+            rect.Height = radius * 2;
+
+            g.DrawEllipse(p, rect);
+            g.FillEllipse(Brushes.Green, rect);
+        }
+
         private void radiusControl_Scroll(object sender, EventArgs e)
         {
+            brightnessControl_Scroll(null, null);
+            maximumSize.BackColor = Color.Black;
+            Graphics g = this.maximumSize.CreateGraphics();
+            g.Clear(maximumSize.BackColor);        
+            Pen p = new Pen(Brushes.Green);
+            p.Width = 1;
+            Rectangle rect = new Rectangle();
+            rect.X = maximumSize.Width / 2;
+            rect.Y = maximumSize.Height / 2;
+            
+            double sliderValue = calculateSliderValue(maximumRadius.Value);
+            int radius = (int) Math.Sqrt(sliderValue / Math.PI);
+            rect.Width = radius *2;
+            rect.Height = radius * 2;       
 
+            g.DrawEllipse(p, rect);
+            g.FillEllipse(Brushes.Green, rect);
+        }
+
+        public double calculateSliderValue(int sliderPosition)
+        {
+            int f = 1;
+            int p = sliderPosition;
+            double c = Math.Log(EditedImage.Size.Height * EditedImage.Size.Width) / 100;
+
+            double sliderValue = f * Math.Exp(p * c);
+            return sliderValue;
         }
 
         private void CountByRadius_Click(object sender, EventArgs e)
         {
-            numOfSpots = numberOfPoints(editedImage);
-            int num = numOfSpots[0];
-            numberOfSpots.Text = num.ToString();
-            num = numOfSpots[1];
-            adjustedCountByRadius.Text = num.ToString();
+        }
+
+        private void count_Click_1(object sender, EventArgs e)
+        {
+        }
+
+        private void adjustedCountByRadius_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void displayText_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            if (!displayText.Checked)
+            {
+                brightnessControl_Scroll(null, null);
+            }
+            else
+            {
+                numOfSpots = numberOfPoints(editedImage);
+            }
         }
     }
 }
