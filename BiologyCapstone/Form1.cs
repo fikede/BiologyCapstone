@@ -35,6 +35,8 @@ namespace BiologyCapstone
             maximumRadius.Maximum = 100;
             minimumRadius.Minimum = 0;
             minimumRadius.Maximum = 100;
+            ZoomSlider.Hide();
+            Zoom.Hide();
         }
                
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -96,9 +98,7 @@ namespace BiologyCapstone
             ZoomSlider.Value = zoomCentre;
             brightnessControl.Value = 0;
             maximumRadius.Value = 1;
-            minimumRadius.Value = 1;
-            ZoomSlider.Hide();
-            Zoom.Hide();
+            minimumRadius.Value = 1;            
         }
 
         private void ZoomSlider_Scroll(object sender, EventArgs e)
