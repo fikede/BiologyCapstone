@@ -100,7 +100,7 @@ namespace BiologyCapstone
             ZoomSlider.Value = zoomCentre;
             brightnessControl.Value = 0;
             maximumRadius.Value = 1;
-            minimumRadius.Value = 1;            
+            minimumRadius.Value = 1;
         }
 
         private void ZoomSlider_Scroll(object sender, EventArgs e)
@@ -356,7 +356,7 @@ namespace BiologyCapstone
             Graphics g = this.minimumSize.CreateGraphics();
             g.Clear(minimumSize.BackColor);
             
-            Pen p = new Pen(Brushes.Green);
+            Pen p = new Pen(Brushes.Lime);
             p.Width = 1;
             Rectangle rect = new Rectangle();            
 
@@ -369,7 +369,7 @@ namespace BiologyCapstone
             rect.Y = (minimumSize.Height / 2) - radius;
 
             g.DrawEllipse(p, rect);
-            g.FillEllipse(Brushes.Green, rect);
+            g.FillEllipse(Brushes.Lime, rect);
         }
 
         private void radiusControl_Scroll(object sender, EventArgs e)
@@ -378,7 +378,7 @@ namespace BiologyCapstone
             maximumSize.BackColor = Color.Black;
             Graphics g = this.maximumSize.CreateGraphics();
             g.Clear(maximumSize.BackColor);        
-            Pen p = new Pen(Brushes.Green);
+            Pen p = new Pen(Brushes.Lime);
             p.Width = 1;
             Rectangle rect = new Rectangle();
            
@@ -392,7 +392,7 @@ namespace BiologyCapstone
             rect.Y = (maximumSize.Height / 2) - radius;
 
             g.DrawEllipse(p, rect);
-            g.FillEllipse(Brushes.Green, rect);
+            g.FillEllipse(Brushes.Lime, rect);
         }
 
         public double calculateNumberOfPixels(int sliderPosition)
