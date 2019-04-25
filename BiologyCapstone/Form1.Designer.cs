@@ -40,7 +40,6 @@
             this.MinRadius = new System.Windows.Forms.Label();
             this.Zoom = new System.Windows.Forms.Label();
             this.Brightness = new System.Windows.Forms.Label();
-            this.brightnessCount = new System.Windows.Forms.Label();
             this.countByRadius = new System.Windows.Forms.Label();
             this.minimumSize = new System.Windows.Forms.PictureBox();
             this.maximumSize = new System.Windows.Forms.PictureBox();
@@ -162,20 +161,10 @@
             this.Brightness.TabIndex = 12;
             this.Brightness.Text = "Brightness";
             // 
-            // brightnessCount
-            // 
-            this.brightnessCount.AutoSize = true;
-            this.brightnessCount.Location = new System.Drawing.Point(458, 369);
-            this.brightnessCount.Name = "brightnessCount";
-            this.brightnessCount.Size = new System.Drawing.Size(95, 13);
-            this.brightnessCount.TabIndex = 15;
-            this.brightnessCount.Text = "countByBrightness";
-            this.brightnessCount.Click += new System.EventHandler(this.count_Click_1);
-            // 
             // countByRadius
             // 
             this.countByRadius.AutoSize = true;
-            this.countByRadius.Location = new System.Drawing.Point(474, 439);
+            this.countByRadius.Location = new System.Drawing.Point(460, 383);
             this.countByRadius.Name = "countByRadius";
             this.countByRadius.Size = new System.Drawing.Size(79, 13);
             this.countByRadius.TabIndex = 16;
@@ -221,7 +210,6 @@
             this.Controls.Add(this.maximumSize);
             this.Controls.Add(this.minimumSize);
             this.Controls.Add(this.countByRadius);
-            this.Controls.Add(this.brightnessCount);
             this.Controls.Add(this.Brightness);
             this.Controls.Add(this.Zoom);
             this.Controls.Add(this.MinRadius);
@@ -265,7 +253,6 @@
         private System.Windows.Forms.Label MinRadius;
         private System.Windows.Forms.Label Zoom;
         private System.Windows.Forms.Label Brightness;
-        private System.Windows.Forms.Label brightnessCount;
         private System.Windows.Forms.Label countByRadius;
         private System.Windows.Forms.PictureBox minimumSize;
         private System.Windows.Forms.PictureBox maximumSize;
