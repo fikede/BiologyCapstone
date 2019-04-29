@@ -280,7 +280,10 @@ namespace BiologyCapstone
                     Point p = new Point();
                     p.X = spots[c].getCentrePointY();
                     p.Y = spots[c].getCentrePointX();
-                    g.DrawString(text, arialFont, Brushes.OrangeRed, p);
+                    if (displayText.Checked)
+                    {
+                        g.DrawString(text, arialFont, Brushes.OrangeRed, p);
+                    }                        
                 }
             }
         }
