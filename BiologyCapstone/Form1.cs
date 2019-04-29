@@ -22,7 +22,7 @@ namespace BiologyCapstone
         public float height;
         int numOfSpots;
         public int minNumberOfPixels;
-        public int maxNumberOfPixels;
+        public int maxNumberOfPixels = 1;
         public Form1()
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace BiologyCapstone
             brightnessControl.Minimum = 0;
             brightnessControl.Maximum = 100;
             brightnessControl.Value = 0;
-            maximumRadius.Minimum = 0;
+            maximumRadius.Minimum = 1;
             maximumRadius.Maximum = 100;
             minimumRadius.Minimum = 0;
             minimumRadius.Maximum = 100;
