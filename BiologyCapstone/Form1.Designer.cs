@@ -58,7 +58,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(402, 315);
+            this.pictureBox1.Size = new System.Drawing.Size(413, 315);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -91,10 +91,9 @@
             // EditedImage
             // 
             this.EditedImage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.EditedImage.Location = new System.Drawing.Point(502, 12);
+            this.EditedImage.Location = new System.Drawing.Point(513, 12);
             this.EditedImage.Name = "EditedImage";
-            this.EditedImage.Size = new System.Drawing.Size(402, 315);
-            this.EditedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.EditedImage.Size = new System.Drawing.Size(445, 315);
             this.EditedImage.TabIndex = 4;
             this.EditedImage.TabStop = false;
             this.EditedImage.Click += new System.EventHandler(this.EditedImage_Click);
@@ -205,7 +204,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(942, 503);
+            this.ClientSize = new System.Drawing.Size(970, 502);
             this.Controls.Add(this.displayText);
             this.Controls.Add(this.maximumSize);
             this.Controls.Add(this.minimumSize);
@@ -225,6 +224,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.Resize += new System.EventHandler(this.Form1_Resize_1);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).EndInit();

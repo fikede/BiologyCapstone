@@ -48,6 +48,13 @@ namespace BiologyCapstone
             setControls(newWidth, newHeight, this);
         }
 
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            float newWidth = this.Width / width;
+            float newHeight = this.Height / height;
+            setControls(newWidth, newHeight, this);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             width = this.Width;
@@ -432,7 +439,7 @@ namespace BiologyCapstone
             {
                 numOfSpots = numberOfPoints(editedImage);
             }
-        }
+        }                
     }
 }
 
